@@ -18,6 +18,7 @@ import {
   Twitter
 } from "lucide-react";
 import { useWishlistStore } from "@/store/useWishlistStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface MobileDrawerProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
   const [expandedNavIndex, setExpandedNavIndex] = useState<number | null>(0); // Default first category open
   const [searchQuery, setSearchQuery] = useState("");
   const wishlistItems = useWishlistStore((state) => state.items);
+  const user = useAuthStore((state) => state.user);
 
   if (!isOpen) return null;
 
@@ -200,7 +202,7 @@ export default function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                 className="flex items-center space-x-3 py-2 text-xs font-medium text-foreground/80 hover:text-primary"
               >
                 <User className="w-4 h-4 text-muted-foreground" />
-                <span>My Profile & Orders</span>
+                <span>{user ? `Account (${user.name.split(" ")[0]})` : "Sign In / Register"}</span>
               </Link>
 
               <Link

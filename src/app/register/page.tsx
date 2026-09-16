@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zelevationConfig } from "@/../zelevation.config";
+import { useAuthStore } from "@/store/useAuthStore";
 import { Lock, Mail, User, ArrowRight, Sparkles } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const login = useAuthStore((state) => state.login);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,9 +22,14 @@ export default function RegisterPage() {
     e.preventDefault();
     setIsLoading(true);
     setTimeout(() => {
+      login({
+        id: `user-${Date.now()}`,
+        name: `${formData.firstName} ${formData.lastName}`.trim() || "Valued Client",
+        email: formData.email,
+      });
       setIsLoading(false);
       router.push("/account");
-    }, 800);
+    }, 500);
   };
 
   return (

@@ -4,22 +4,46 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zelevationConfig } from "@/../zelevation.config";
-import { Eye, EyeOff, Lock, Mail, ArrowRight } from "lucide-react";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Eye, EyeOff, Lock, Mail, ArrowRight, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("client@zelevation.com");
-  const [password, setPassword] = useState("password123");
+  const login = useAuthStore((state) => state.login);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!email) return;
     setIsLoading(true);
+
     setTimeout(() => {
+      const rawName = email.split("@")[0].replace(/[._-]/g, " ");
+      const formattedName = rawName
+        .split(" ")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" ");
+
+      login({
+        id: `user-${Date.now()}`,
+        name: formattedName || "Valued Client",
+        email: email,
+      });
       setIsLoading(false);
       router.push("/account");
-    }, 800);
+    }, 400);
+  };
+
+  const handleDemoLogin = () => {
+    login({
+      id: "demo-client",
+      name: "Aryan Sharma",
+      email: "client@zelevation.com",
+    });
+    router.push("/account");
   };
 
   return (
@@ -110,6 +134,15 @@ export default function LoginPage() {
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            className="w-full py-2.5 bg-muted text-foreground/80 hover:text-foreground text-xs font-medium rounded-lg hover:bg-muted/80 transition-colors flex items-center justify-center gap-2 border border-border"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-secondary" />
+            <span>Preview with Demo Account</span>
           </button>
         </form>
 

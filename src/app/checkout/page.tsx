@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
+import { useAuthStore } from "@/store/useAuthStore";
+import { Order } from "@/types";
 import { formatPrice } from "@/lib/utils";
 import { zelevationConfig } from "@/../zelevation.config";
 import { 
@@ -23,17 +25,36 @@ export default function CheckoutPage() {
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
   const clearCart = useCartStore((state) => state.clearCart);
 
-  // Form State
+  const user = useAuthStore((state) => state.user);
+  const addOrder = useAuthStore((state) => state.addOrder);
+  const login = useAuthStore((state) => state.login);
+
+  // Form State - Starts empty, auto-populates if user is logged in
   const [formData, setFormData] = useState({
-    email: "client@zelevation.com",
-    firstName: "Aryan",
-    lastName: "Sharma",
-    address: "Flat 402, Signature Heights, 100 Feet Road",
-    city: "Bengaluru",
-    state: "Karnataka",
-    postalCode: "560038",
-    phone: "+91 98765 43210",
+    email: "",
+    firstName: "",
+    lastName: "",
+    address: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    phone: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        email: prev.email || user.email || "",
+        firstName: prev.firstName || (user.name ? user.name.split(" ")[0] : ""),
+        lastName: prev.lastName || (user.name ? user.name.split(" ").slice(1).join(" ") : ""),
+        address: prev.address || user.addresses?.[0]?.addressLine1 || "",
+        city: prev.city || user.addresses?.[0]?.city || "",
+        state: prev.state || user.addresses?.[0]?.state || "",
+        postalCode: prev.postalCode || user.addresses?.[0]?.postalCode || "",
+        phone: prev.phone || user.phone || "",
+      }));
+    }
+  }, [user]);
 
   const [shippingMethod, setShippingMethod] = useState("express");
   const [paymentMethod, setPaymentMethod] = useState("upi");
@@ -66,16 +87,95 @@ export default function CheckoutPage() {
 
       const data = await res.json();
       if (data.success) {
-        setConfirmedOrderId(data.orderId || `#${Math.floor(1000 + Math.random() * 9000)}`);
+        const orderNum = data.orderId ? `#${data.orderId}` : `#${Math.floor(1000 + Math.random() * 9000)}`;
+        setConfirmedOrderId(orderNum);
         setOrderConfirmed(true);
+
+        // Record real order in AuthStore
+        const newOrder: Order = {
+          id: String(data.orderId || Date.now()),
+          orderNumber: orderNum,
+          date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          status: "Processing",
+          total: grandTotal,
+          items: items.map((item) => ({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+            selectedSize: item.selectedSize,
+            selectedColor: item.selectedColor,
+          })),
+          shippingAddress: {
+            fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+            addressLine: formData.address,
+            city: formData.city,
+            state: formData.state,
+            postalCode: formData.postalCode,
+            phone: formData.phone,
+          },
+        };
+        addOrder(newOrder);
+
+        // If user is not yet logged in, auto-create customer session
+        if (!user) {
+          login({
+            id: `cust-${Date.now()}`,
+            name: `${formData.firstName} ${formData.lastName}`.trim(),
+            email: formData.email,
+            phone: formData.phone,
+            addresses: [
+              {
+                id: `addr-${Date.now()}`,
+                title: "Primary Address",
+                isDefault: true,
+                fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+                addressLine1: formData.address,
+                city: formData.city,
+                state: formData.state,
+                postalCode: formData.postalCode,
+                phone: formData.phone,
+              },
+            ],
+          });
+        }
+
         clearCart();
       } else {
         alert(data.message || "Could not process order");
       }
     } catch (err) {
       console.error(err);
-      setConfirmedOrderId(`ZEL-${Math.floor(100000 + Math.random() * 900000)}`);
+      const fallbackOrderId = `ZEL-${Math.floor(100000 + Math.random() * 900000)}`;
+      setConfirmedOrderId(fallbackOrderId);
       setOrderConfirmed(true);
+
+      const newOrder: Order = {
+        id: String(Date.now()),
+        orderNumber: fallbackOrderId,
+        date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+        status: "Processing",
+        total: grandTotal,
+        items: items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          image: item.image,
+          selectedSize: item.selectedSize,
+          selectedColor: item.selectedColor,
+        })),
+        shippingAddress: {
+          fullName: `${formData.firstName} ${formData.lastName}`.trim(),
+          addressLine: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postalCode: formData.postalCode,
+          phone: formData.phone,
+        },
+      };
+      addOrder(newOrder);
       clearCart();
     } finally {
       setIsProcessing(false);
@@ -185,6 +285,7 @@ export default function CheckoutPage() {
                   type="email"
                   name="email"
                   required
+                  placeholder="your.email@example.com"
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -208,6 +309,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="firstName"
                     required
+                    placeholder="First Name"
                     value={formData.firstName}
                     onChange={handleChange}
                     className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -219,6 +321,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="lastName"
                     required
+                    placeholder="Last Name"
                     value={formData.lastName}
                     onChange={handleChange}
                     className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -232,6 +335,7 @@ export default function CheckoutPage() {
                   type="text"
                   name="address"
                   required
+                  placeholder="Apartment, suite, unit, street address"
                   value={formData.address}
                   onChange={handleChange}
                   className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -245,6 +349,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="city"
                     required
+                    placeholder="City / District"
                     value={formData.city}
                     onChange={handleChange}
                     className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -256,6 +361,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="state"
                     required
+                    placeholder="State"
                     value={formData.state}
                     onChange={handleChange}
                     className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -267,6 +373,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="postalCode"
                     required
+                    placeholder="PIN / Zip"
                     value={formData.postalCode}
                     onChange={handleChange}
                     className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"
@@ -280,6 +387,7 @@ export default function CheckoutPage() {
                   type="tel"
                   name="phone"
                   required
+                  placeholder="+91 98765 43210"
                   value={formData.phone}
                   onChange={handleChange}
                   className="w-full p-3 bg-card border border-border rounded-lg text-xs focus:outline-none focus:ring-1 focus:ring-primary"

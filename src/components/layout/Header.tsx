@@ -18,6 +18,7 @@ import MegaMenu from "./MegaMenu";
 import MobileDrawer from "./MobileDrawer";
 import { useCartStore } from "@/store/useCartStore";
 import { useWishlistStore } from "@/store/useWishlistStore";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Header() {
   const router = useRouter();
@@ -26,12 +27,15 @@ export default function Header() {
   const [activeMegaMenu, setActiveMegaMenu] = useState<NavItem | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isClient, setIsClient] = useState(false);
 
   const totalCartItems = useCartStore((state) => state.getTotalItems());
   const openCart = useCartStore((state) => state.openCart);
   const wishlistItems = useWishlistStore((state) => state.items);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
+    setIsClient(true);
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 25);
     };
@@ -150,10 +154,23 @@ export default function Header() {
             {/* My Account Link */}
             <Link
               href="/account"
-              className="p-2 text-foreground/70 hover:text-foreground hover:bg-muted/60 rounded-full transition-colors hidden sm:inline-flex"
+              className="p-1.5 sm:p-2 text-foreground/70 hover:text-foreground hover:bg-muted/60 rounded-full transition-colors hidden sm:inline-flex items-center"
               aria-label="My Account"
             >
-              <User className="w-5 h-5" />
+              {isClient && user ? (
+                <span className="w-7 h-7 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center border border-border shadow-xs">
+                  {user.name
+                    ? user.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .slice(0, 2)
+                        .toUpperCase()
+                    : "CL"}
+                </span>
+              ) : (
+                <User className="w-5 h-5" />
+              )}
             </Link>
 
             {/* Cart Trigger with live count */}
