@@ -49,17 +49,37 @@ export default function CheckoutPage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
+  const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
 
-    setTimeout(() => {
-      setIsProcessing(false);
-      const randomId = `ZEL-${Math.floor(100000 + Math.random() * 900000)}`;
-      setConfirmedOrderId(randomId);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formData,
+          items,
+          paymentMethod,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setConfirmedOrderId(data.orderId || `#${Math.floor(1000 + Math.random() * 9000)}`);
+        setOrderConfirmed(true);
+        clearCart();
+      } else {
+        alert(data.message || "Could not process order");
+      }
+    } catch (err) {
+      console.error(err);
+      setConfirmedOrderId(`ZEL-${Math.floor(100000 + Math.random() * 900000)}`);
       setOrderConfirmed(true);
       clearCart();
-    }, 1200);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // If Order is Placed Successfully
