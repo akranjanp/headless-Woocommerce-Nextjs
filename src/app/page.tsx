@@ -5,6 +5,8 @@ import CategoryEditorial from "@/components/home/CategoryEditorial";
 import CuratedProductShowcase from "@/components/home/CuratedProductShowcase";
 import InteractiveLookbook from "@/components/home/InteractiveLookbook";
 import BrandStoryPillars from "@/components/home/BrandStoryPillars";
+import TrustBenefitsBar from "@/components/home/TrustBenefitsBar";
+import VipNewsletterBanner from "@/components/home/VipNewsletterBanner";
 import FloatingThemeCustomizer from "@/components/common/FloatingThemeCustomizer";
 
 export default async function HomePage() {
@@ -16,7 +18,10 @@ export default async function HomePage() {
       {/* 1. HERO SECTION: Interactive Haute-Couture Runway Slider */}
       <HeroCarousel />
 
-      {/* 2. LUXURY RUNWAY TICKER */}
+      {/* 2. TRUST BENEFITS STRIP (VIP Services & Delivery) */}
+      <TrustBenefitsBar />
+
+      {/* 3. LUXURY RUNWAY TICKER */}
       <section className="border-y border-border/80 bg-muted/40 py-3.5 overflow-hidden select-none">
         <div className="flex whitespace-nowrap animate-marquee">
           {[...Array(6)].map((_, i) => (
@@ -39,19 +44,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 3. ASYMMETRIC EDITORIAL CATEGORY SHOWCASE */}
+      {/* 4. ASYMMETRIC EDITORIAL CATEGORY SHOWCASE */}
       <CategoryEditorial categories={categories} />
 
-      {/* 4. CURATED PRODUCT SHOWCASE (With Filter Tabs & Quick-View Modal) */}
+      {/* 5. CURATED PRODUCT SHOWCASE (With Filter Tabs & Quick-View Modal) */}
       <CuratedProductShowcase initialProducts={products} />
 
-      {/* 5. INTERACTIVE LOOKBOOK (Vogue-Style Runway Canvas with Hotspots) */}
+      {/* 6. INTERACTIVE LOOKBOOK (Vogue-Style Runway Canvas with Hotspots) */}
       <InteractiveLookbook />
 
-      {/* 6. BRAND STORY, CRAFTSMANSHIP PILLARS & PRESS SHOWCASE */}
+      {/* 7. BRAND STORY, CRAFTSMANSHIP PILLARS & PRESS SHOWCASE */}
       <BrandStoryPillars />
 
-      {/* 7. DISCREET FLOATING THEME CUSTOMIZER FOR AGENCY DEMO */}
+      {/* 8. VIP ATELIER NEWSLETTER INVITATION */}
+      <VipNewsletterBanner />
+
+      {/* 9. DISCREET FLOATING THEME CUSTOMIZER FOR AGENCY DEMO */}
       <FloatingThemeCustomizer />
     </div>
   );

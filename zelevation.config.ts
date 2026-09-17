@@ -90,12 +90,12 @@ export const zelevationConfig: ZelevationConfig = {
     logoText: "ZELEVATION",
     logoAccent: "ATELIER",
     colors: {
-      primary: "#111827", // Rich obsidian black
-      primaryHover: "#1f2937",
-      secondary: "#c5a880", // Champagne gold accent
-      accent: "#b45309", // Warm copper
-      background: "#fafaf9", // Warm linen white
-      foreground: "#18181b", // Charcoal
+      primary: "#090d16", // Deep Royal Midnight Velvet
+      primaryHover: "#162033",
+      secondary: "#d97706", // Gleaming Champagne Gold
+      accent: "#e11d48", // Vibrant Couture Rose-Coral
+      background: "#fcfbf9", // Warm porcelain pearl
+      foreground: "#090d16", // Deep Midnight
     },
   },
   announcements: [

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, ArrowRight, ChevronLeft, ChevronRight, Sparkles, Zap, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ChevronLeft, ChevronRight, Sparkles, Zap, ShieldCheck, Star } from "lucide-react";
 
 interface Slide {
   id: number;
@@ -22,45 +22,45 @@ interface Slide {
 const HERO_SLIDES: Slide[] = [
   {
     id: 1,
-    badge: "SS'26 RUNWAY CAPSULE • LOOK 01",
-    titlePart1: "THE ARCHITECTURAL",
-    titleAccent: "SILHOUETTE",
+    badge: "✨ SS'26 HAUTE RUNWAY • EXCLUSIVE DROP",
+    titlePart1: "ELEVATE YOUR",
+    titleAccent: "EVERYDAY LUXURY",
     description:
-      "Sculptural tailoring in double-faced Italian virgin wool and hand-loomed mulberry silk. Engineered for the modern sartorial vanguard.",
-    primaryCtaText: "Explore Runway Capsule",
+      "Sculptural tailoring, pure Italian mulberry silk, and architectural precision designed to make every entrance unforgettable.",
+    primaryCtaText: "Shop New Arrivals",
     primaryCtaHref: "/shop?cat=women",
     secondaryCtaText: "View Interactive Lookbook",
     secondaryCtaHref: "/shop?lookbook=true",
     image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&q=85",
-    lookTag: "Look 01: The Hourglass Blazer • Milan Runway",
+    lookTag: "✦ Milan Runway • Sculptural Mulberry Silk",
   },
   {
     id: 2,
-    badge: "ATELIER MENSWEAR • CAPSULE 02",
-    titlePart1: "SARTORIAL PRECISION",
-    titleAccent: "IN RAW SILK",
+    badge: "🌟 CONTEMPORARY SARTORIAL MENSWEAR",
+    titlePart1: "MODERN ELEGANCE",
+    titleAccent: "IN RAW SILK & CASHMERE",
     description:
-      "Structured boxy overshirts, fluid wide-leg pleats, and artisanal handcrafted leather loafers for discerning contemporary silhouettes.",
-    primaryCtaText: "Discover Menswear",
+      "Sharp tailored overcoats, relaxed pleated trousers, and bespoke handcrafted leather sneakers for the modern vanguard.",
+    primaryCtaText: "Explore Menswear",
     primaryCtaHref: "/shop?cat=men",
-    secondaryCtaText: "Explore Footwear",
+    secondaryCtaText: "Discover Footwear",
     secondaryCtaHref: "/shop?cat=men-shoes",
     image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1920&q=85",
-    lookTag: "Look 08: Bespoke Silk & Pleated Wool • Paris Preview",
+    lookTag: "✦ Paris Preview • Artisanal Footwear",
   },
   {
     id: 3,
-    badge: "LIMITED EDITION • ARCHIVE DROP",
-    titlePart1: "MONOCHROME NOIR",
-    titleAccent: "COLLECTION",
+    badge: "🔥 SUNLIT RIVIERA RESORT CAPSULE • UP TO 40% OFF",
+    titlePart1: "THE GOLDEN HOUR",
+    titleAccent: "RESORT COLLECTION",
     description:
-      "Minimalist monochrome essentials crafted in strictly numbered artisan batches. Once acquired, archived forever.",
-    primaryCtaText: "Shop The Archive",
-    primaryCtaHref: "/shop?filter=new",
-    secondaryCtaText: "Explore Full Catalog",
+      "Effortless silk linen dresses, lightweight resortwear, and limited-edition handcrafted leather accessories for sun-drenched days.",
+    primaryCtaText: "Shop Summer Sale",
+    primaryCtaHref: "/shop?filter=sale",
+    secondaryCtaText: "Browse Entire Edit",
     secondaryCtaHref: "/shop",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&q=85",
-    lookTag: "Look 14: Noir Evening Edition • Atelier Exclusive",
+    image: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&q=85",
+    lookTag: "✦ Saint-Tropez Resort • Limited Edition",
   },
 ];
 
@@ -123,21 +123,21 @@ export default function HeroCarousel() {
       {/* Hero Content Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center text-white space-y-6 sm:space-y-8 pt-10 pb-16">
         {/* Editorial Sub-badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-secondary animate-fade-in">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-rose-500/20 to-amber-500/20 backdrop-blur-md border border-amber-400/40 text-[10px] sm:text-xs font-semibold tracking-[0.25em] uppercase text-amber-200 animate-fade-in shadow-lg">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400" />
           <span>{slide.badge}</span>
         </div>
 
         {/* Majestic Haute-Couture Typography */}
-        <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.05] drop-shadow-sm">
+        <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[1.05] drop-shadow-md">
           {slide.titlePart1} <br />
-          <span className="italic font-light text-secondary drop-shadow-sm">
+          <span className="italic font-light bg-gradient-to-r from-amber-300 via-rose-300 to-amber-200 bg-clip-text text-transparent drop-shadow-md">
             {slide.titleAccent}
           </span>
         </h1>
 
         {/* Narrative */}
-        <p className="max-w-2xl mx-auto text-xs sm:text-sm md:text-base text-white/85 font-normal leading-relaxed tracking-wide">
+        <p className="max-w-2xl mx-auto text-xs sm:text-sm md:text-base text-white/90 font-normal leading-relaxed tracking-wide">
           {slide.description}
         </p>
 
@@ -145,7 +145,7 @@ export default function HeroCarousel() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
           <Link
             href={slide.primaryCtaHref}
-            className="w-full sm:w-auto px-8 py-4 bg-white text-primary font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-secondary hover:text-white transition-all duration-300 shadow-2xl flex items-center justify-center gap-2 group"
+            className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-amber-500 via-rose-500 to-amber-600 hover:from-amber-600 hover:to-rose-600 text-white font-bold text-xs uppercase tracking-[0.2em] rounded-xl transition-all duration-300 shadow-xl shadow-rose-500/25 flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>{slide.primaryCtaText}</span>
             <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -153,23 +153,26 @@ export default function HeroCarousel() {
 
           <Link
             href={slide.secondaryCtaHref}
-            className="w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-md border border-white/30 text-white font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-white/20 transition-all duration-300 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-4 bg-white/15 backdrop-blur-md border border-white/40 hover:border-amber-300 text-white hover:text-amber-200 font-bold text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-white/25 transition-all duration-300 flex items-center justify-center gap-2 hover:scale-[1.02]"
           >
             <span>{slide.secondaryCtaText}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        {/* Headless & WooCommerce Security Badges */}
-        <div className="pt-6 flex items-center justify-center gap-6 text-[10px] sm:text-[11px] font-medium tracking-widest uppercase text-white/60">
-          <span className="flex items-center gap-1.5">
-            <Zap className="w-3.5 h-3.5 text-secondary" />
-            Sub-Second Headless Speed
+        {/* Client Trust & Assurance Badges */}
+        <div className="pt-4 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[10px] sm:text-[11px] font-medium tracking-widest uppercase text-white/85">
+          <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 shadow-xs">
+            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+            4.9/5 Rating (2,400+ VIP Clients)
           </span>
-          <span className="opacity-40">•</span>
-          <span className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
-            WordPress WooCommerce Engine
+          <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 shadow-xs">
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            Express 48H Insured Delivery
+          </span>
+          <span className="flex items-center gap-1.5 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/15 shadow-xs">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+            100% Certified Authentic
           </span>
         </div>
       </div>

@@ -20,7 +20,7 @@ export default function TopAnnouncement() {
   if (!isVisible || !announcements || announcements.length === 0) return null;
 
   return (
-    <div className="bg-primary text-primary-foreground text-xs font-medium tracking-wider uppercase py-2 px-4 relative flex items-center justify-between border-b border-white/10 z-50">
+    <div className="bg-gradient-to-r from-[#090d16] via-[#151c2c] to-[#090d16] text-amber-300/90 text-[11px] font-medium tracking-wider uppercase py-2 px-4 relative flex items-center justify-between border-b border-amber-500/20 z-50 shadow-inner">
       <div className="flex-1 text-center truncate">
         <span className="inline-block transition-all duration-500 ease-in-out">
           {announcements[currentIndex]}

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { zelevationConfig } from "@/../zelevation.config";
 import { 
   Instagram, 
@@ -80,14 +81,25 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 py-14 border-b border-white/10">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-baseline space-x-2">
-              <span className="font-serif text-2xl font-bold tracking-tight text-white">
-                {zelevationConfig.branding.logoText}
-              </span>
-              <span className="text-[10px] font-bold tracking-widest text-secondary px-1.5 py-0.5 rounded bg-white/10">
-                {zelevationConfig.branding.logoAccent}
-              </span>
-            </div>
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative w-10 h-10 rounded-full overflow-hidden border border-amber-500/40 bg-white p-0.5">
+                <Image
+                  src="/logo.jpg"
+                  alt="Zelevation"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover rounded-full"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-2xl font-black tracking-[0.2em] text-white uppercase leading-none">
+                  {zelevationConfig.branding.logoText}
+                </span>
+                <span className="text-[7.5px] font-sans font-bold tracking-[0.4em] text-amber-400 uppercase mt-1">
+                  HAUTE ATELIER
+                </span>
+              </div>
+            </Link>
             <p className="text-xs text-white/70 max-w-sm leading-relaxed">
               {zelevationConfig.store.tagline}. Redefining luxury through architectural silhouettes, ethical slow-fashion tailoring, and sensory materials.
             </p>
